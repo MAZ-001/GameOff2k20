@@ -12,11 +12,11 @@ export(NodePath) var player_cursor
 #	pass # Replace with function body.
 
 func _integrate_forces(state):
-	var xform = state.get_transform().looking_at(Vector3(0, 0, 0), Vector3(0, 1, 0))
+	var xform = state.get_transform().looking_at(Vector3(0.01, 0, 0), Vector3(0, 1, 0))
 	state.set_transform(xform)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	var player_cursor_node = get_node(player_cursor)
 	
 	var transform = player_cursor_node.get_global_transform()

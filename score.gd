@@ -13,9 +13,9 @@ var score = 0
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	self.text = 'score: ' + str(self.score)
 
 
-func add_score(score):
-	self.score = self.score + score
+func add_score(point: int):
+	self.score = self.score + point

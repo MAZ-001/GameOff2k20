@@ -53,4 +53,5 @@ func _physics_process(_delta):
 	if Input.is_action_pressed("ui_left"):
 		movement += Vector3(0, 0, 1)
 	
-	self.rotate(movement, speed)
+	if movement.length() > 0:
+		self.rotate(movement, speed)

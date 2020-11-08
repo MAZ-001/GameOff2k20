@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://target.gd" type="Script" id=1]
+
+[sub_resource type="SphereShape" id=1]
+radius = 0.66
+
+[node name="target" type="RigidBody"]
+axis_lock_linear_z = true
+script = ExtResource( 1 )
+type = "target"
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 1 )
+
+[node name="CSGSphere" type="CSGSphere" parent="."]
+radial_segments = 4
+rings = 3
+smooth_faces = false

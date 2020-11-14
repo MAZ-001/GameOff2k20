@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://blender/target_asteroid.gltf" type="PackedScene" id=1]
+[ext_resource path="res://target.gd" type="Script" id=2]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 0.666667, 0.4, 0.196078, 1 )
+metallic = 0.73
+roughness = 0.59
+
+[node name="target_asteroid" instance=ExtResource( 1 )]
+axis_lock_linear_z = true
+script = ExtResource( 2 )
+type = "target"
+
+[node name="target_asteroid" parent="." index="0"]
+material/0 = SubResource( 1 )

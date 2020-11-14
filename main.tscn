@@ -1,21 +1,57 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://player_cursor.gd" type="Script" id=1]
 [ext_resource path="res://game.gd" type="Script" id=2]
 [ext_resource path="res://player.gd" type="Script" id=3]
 [ext_resource path="res://fps.vs" type="Script" id=4]
 [ext_resource path="res://score.gd" type="Script" id=5]
+[ext_resource path="res://moon.tscn" type="PackedScene" id=6]
+[ext_resource path="res://bobembu.tscn" type="PackedScene" id=7]
+[ext_resource path="res://moon.gd" type="Script" id=8]
 
 [sub_resource type="SphereShape" id=1]
+radius = 5.0
 
 [sub_resource type="SphereShape" id=2]
-radius = 5.0
+margin = 0.01
+radius = 1.02
 
 [sub_resource type="Environment" id=3]
 background_mode = 1
 
-[sub_resource type="SphereShape" id=4]
-radius = 0.12
+[sub_resource type="CapsuleShape" id=4]
+radius = 0.08
+height = 0.2
+
+[sub_resource type="CapsuleShape" id=5]
+radius = 0.15
+height = 0.5
+
+[sub_resource type="Gradient" id=6]
+colors = PoolColorArray( 0.594727, 0.594727, 0.594727, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 6 )
+
+[sub_resource type="ParticlesMaterial" id=8]
+emission_shape = 2
+emission_box_extents = Vector3( 10, 5, 1 )
+gravity = Vector3( 0, 0, 0 )
+scale = 0.01
+scale_random = 0.01
+color_ramp = SubResource( 7 )
+
+[sub_resource type="SpatialMaterial" id=9]
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id=10]
+material = SubResource( 9 )
+radius = 0.5
+height = 1.0
+radial_segments = 4
+rings = 1
+is_hemisphere = true
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 2 )
@@ -55,35 +91,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DirectionalLight" type="DirectionalLight" parent="."]
+[node name="light_target" type="Spatial" parent="."]
+transform = Transform( -0.568164, -0.265409, -0.778941, -0.597935, 0.783487, 0.169178, 0.565389, 0.561876, -0.603846, 0, 0, 0 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="light_target"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 17.6135 )
-light_color = Color( 0.439216, 0.439216, 0.439216, 1 )
+light_color = Color( 1, 0.956863, 0.811765, 1 )
+shadow_enabled = true
+shadow_color = Color( 0.207843, 0.105882, 0.105882, 1 )
 
-[node name="moon" type="RigidBody" parent="."]
-collision_layer = 0
-mode = 1
+[node name="moon" parent="." instance=ExtResource( 6 )]
 
-[node name="CollisionShape" type="CollisionShape" parent="moon"]
-shape = SubResource( 1 )
-
-[node name="moon" type="CSGSphere" parent="moon"]
-radial_segments = 24
-rings = 24
-
-[node name="player_cursor" type="Spatial" parent="moon/moon"]
-script = ExtResource( 1 )
-camera = NodePath("../../../camera_target/camera")
-world = NodePath("../../../moon")
-shot_origin = NodePath("../../../player/player_placeholder")
-
-[node name="CSGSphere" type="CSGSphere" parent="moon/moon/player_cursor"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.125, 0 )
-radius = 0.05
-radial_segments = 4
-rings = 3
-smooth_faces = false
-
-[node name="Area" type="Area" parent="moon"]
+[node name="gravity_area" type="Area" parent="moon"]
 space_override = 1
 gravity_point = true
 gravity_distance_scale = 1.0
@@ -91,6 +110,26 @@ gravity_vec = Vector3( 0, 0, 0 )
 gravity = 5.0
 linear_damp = 0.01
 angular_damp = 0.01
+
+[node name="gravity_shape" type="CollisionShape" parent="moon/gravity_area"]
+shape = SubResource( 1 )
+
+[node name="player_cursor" type="Spatial" parent="moon"]
+script = ExtResource( 1 )
+camera = NodePath("../../camera_target/camera")
+world = NodePath("../..")
+shot_origin = NodePath("../../moon/player_cursor/CSGSphere")
+player_scene = NodePath("../../player/bobembu")
+
+[node name="CSGSphere" type="CSGSphere" parent="moon/player_cursor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.125, 0 )
+radius = 0.05
+radial_segments = 4
+rings = 3
+smooth_faces = false
+
+[node name="Area" type="Area" parent="moon"]
+script = ExtResource( 8 )
 
 [node name="CollisionShape" type="CollisionShape" parent="moon/Area"]
 shape = SubResource( 2 )
@@ -101,6 +140,7 @@ shape = SubResource( 2 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 17.6135 )
 environment = SubResource( 3 )
 fov = 26.9
+collision_mask = 0
 
 [node name="player" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12497, 0 )
@@ -108,13 +148,39 @@ axis_lock_linear_z = true
 axis_lock_angular_x = true
 axis_lock_angular_y = true
 script = ExtResource( 3 )
-player_cursor = NodePath("../moon/moon/player_cursor/CSGSphere")
+player_cursor = NodePath("../moon/player_cursor/CSGSphere")
+player_scene = NodePath("bobembu")
 
 [node name="CollisionShape" type="CollisionShape" parent="player"]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0.0544918, 0 )
 shape = SubResource( 4 )
 
-[node name="player_placeholder" type="CSGBox" parent="player"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.89679e-05, 0 )
-width = 0.25
-height = 0.25
-depth = 0.25
+[node name="bobembu" parent="player" instance=ExtResource( 7 )]
+transform = Transform( -4.37114e-09, 0, -0.1, 0, 0.1, 0, 0.1, 0, -4.37114e-09, 0, 0.266173, 0 )
+
+[node name="Area" type="Area" parent="player"]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, -0.00706649, 0.130586, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="player/Area"]
+shape = SubResource( 5 )
+
+[node name="rim_light" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.49055, -1.36266, 1.3299 )
+light_color = Color( 0.113725, 0.227451, 0.392157, 1 )
+light_energy = 0.09
+
+[node name="ambient_light" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.0549 )
+light_color = Color( 0.384314, 0.552941, 0.796078, 1 )
+omni_range = 20.0
+
+[node name="starfield" type="Particles" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4 )
+amount = 2000
+lifetime = 256.0
+preprocess = 500.0
+randomness = 1.0
+process_material = SubResource( 8 )
+draw_pass_1 = SubResource( 10 )
+[connection signal="body_entered" from="moon/Area" to="moon/Area" method="_on_body_entered"]
+[connection signal="body_entered" from="player/Area" to="player" method="_on_body_entered"]

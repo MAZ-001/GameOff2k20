@@ -3,8 +3,10 @@ extends Spatial
 export(NodePath) var camera
 export(NodePath) var world
 export(NodePath) var shot_origin
+export(NodePath) var player_scene
 
-var bullet: PackedScene = load('res://bullet.tscn')
+#var bullet: PackedScene = load('res://bullet.tscn')
+var bullet: PackedScene = load('res://bullet_carrot.tscn')
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -35,14 +37,19 @@ func get_target_position():
 # Called every physics frame.
 func _physics_process(_delta):
 	if (Input.is_action_just_pressed("click")):
+		get_node(player_scene).find_node('AnimationTree').set('parameters/throw/active', true)
 		var target_position = get_target_position()
 		
 		var shot_origin_node: Node = get_node(shot_origin)
 		var shot_origin_transform = shot_origin_node.get_global_transform()
 		
 		var instance: Node = bullet.instance()
-		instance.transform = shot_origin_transform.looking_at(target_position, Vector3(0, 1, 0))
-		instance.linear_velocity = shot_origin_transform.origin.direction_to(target_position) * 2.5
+		instance.transform = shot_origin_transform
+		instance.transform.looking_at(target_position, Vector3(0, 1, 0))
+		instance.translation = instance.translation.move_toward(target_position, 0.2)
+		instance.scale = Vector3(0.1, 0.1, 0.1)
+		instance.linear_velocity = shot_origin_transform.origin.direction_to(target_position) * 3
+		instance.angular_velocity = Vector3(rand_range(-5, 5), rand_range(-5, 5), rand_range(-5, 5))
 		
 		var world_node: Node = get_node(world)
 		world_node.add_child(instance)

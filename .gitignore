@@ -20,4 +20,4 @@ mono_crash.*.json
 
 # ---------
 export/
-*.blend*
+*.blend?

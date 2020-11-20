@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=2]
+
+[sub_resource type="Gradient" id=6]
+colors = PoolColorArray( 0.594727, 0.594727, 0.594727, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 6 )
+
+[sub_resource type="ParticlesMaterial" id=8]
+emission_shape = 2
+emission_box_extents = Vector3( 10, 5, 1 )
+gravity = Vector3( 0, 0, 0 )
+scale = 0.01
+scale_random = 0.01
+color_ramp = SubResource( 7 )
+
+[sub_resource type="SpatialMaterial" id=9]
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id=10]
+material = SubResource( 9 )
+radius = 0.5
+height = 1.0
+radial_segments = 4
+rings = 1
+is_hemisphere = true
+
+[node name="starfield" type="Particles"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4 )
+amount = 2000
+lifetime = 256.0
+preprocess = 500.0
+randomness = 1.0
+process_material = SubResource( 8 )
+draw_pass_1 = SubResource( 10 )

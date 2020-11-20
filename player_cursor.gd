@@ -37,7 +37,7 @@ func get_target_position():
 # Called every physics frame.
 func _physics_process(_delta):
 	if (Input.is_action_just_pressed("click")):
-		get_node(player_scene).find_node('AnimationTree').set('parameters/throw/active', true)
+		get_node(player_scene).find_node('AnimationTree').set('parameters/throwing/active', true)
 		var target_position = get_target_position()
 		
 		var shot_origin_node: Node = get_node(shot_origin)

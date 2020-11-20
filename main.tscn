@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://player_cursor.gd" type="Script" id=1]
 [ext_resource path="res://game.gd" type="Script" id=2]
@@ -8,6 +8,9 @@
 [ext_resource path="res://moon.tscn" type="PackedScene" id=6]
 [ext_resource path="res://bobembu.tscn" type="PackedScene" id=7]
 [ext_resource path="res://moon.gd" type="Script" id=8]
+[ext_resource path="res://ui_cursor.gd" type="Script" id=9]
+[ext_resource path="res://cursor.png" type="Texture" id=10]
+[ext_resource path="res://starfield_texture.gd" type="Script" id=11]
 
 [sub_resource type="SphereShape" id=1]
 radius = 5.0
@@ -27,31 +30,8 @@ height = 0.2
 radius = 0.15
 height = 0.5
 
-[sub_resource type="Gradient" id=6]
-colors = PoolColorArray( 0.594727, 0.594727, 0.594727, 1, 1, 1, 1, 1 )
-
-[sub_resource type="GradientTexture" id=7]
-gradient = SubResource( 6 )
-
-[sub_resource type="ParticlesMaterial" id=8]
-emission_shape = 2
-emission_box_extents = Vector3( 10, 5, 1 )
-gravity = Vector3( 0, 0, 0 )
-scale = 0.01
-scale_random = 0.01
-color_ramp = SubResource( 7 )
-
-[sub_resource type="SpatialMaterial" id=9]
-flags_unshaded = true
-vertex_color_use_as_albedo = true
-
-[sub_resource type="SphereMesh" id=10]
-material = SubResource( 9 )
-radius = 0.5
-height = 1.0
-radial_segments = 4
-rings = 1
-is_hemisphere = true
+[sub_resource type="PlaneMesh" id=11]
+size = Vector2( 20, 10 )
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 2 )
@@ -91,6 +71,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="TextureRect" type="TextureRect" parent="Control"]
+margin_left = 247.635
+margin_top = 82.5449
+margin_right = 347.635
+margin_bottom = 182.545
+texture = ExtResource( 10 )
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="light_target" type="Spatial" parent="."]
 transform = Transform( -0.568164, -0.265409, -0.778941, -0.597935, 0.783487, 0.169178, 0.565389, 0.561876, -0.603846, 0, 0, 0 )
 
@@ -123,6 +114,7 @@ player_scene = NodePath("../../player/bobembu")
 
 [node name="CSGSphere" type="CSGSphere" parent="moon/player_cursor"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.125, 0 )
+visible = false
 radius = 0.05
 radial_segments = 4
 rings = 3
@@ -156,7 +148,7 @@ transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0.05
 shape = SubResource( 4 )
 
 [node name="bobembu" parent="player" instance=ExtResource( 7 )]
-transform = Transform( -4.37114e-09, 0, -0.1, 0, 0.1, 0, 0.1, 0, -4.37114e-09, 0, 0.266173, 0 )
+transform = Transform( -4.37114e-09, 0, -0.1, 0, 0.1, 0, 0.1, 0, -4.37114e-09, 0, -0.13438, 0 )
 
 [node name="Area" type="Area" parent="player"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, -0.00706649, 0.130586, 0 )
@@ -174,13 +166,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.0549 )
 light_color = Color( 0.384314, 0.552941, 0.796078, 1 )
 omni_range = 20.0
 
-[node name="starfield" type="Particles" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4 )
-amount = 2000
-lifetime = 256.0
-preprocess = 500.0
-randomness = 1.0
-process_material = SubResource( 8 )
-draw_pass_1 = SubResource( 10 )
+[node name="starfield" type="CSGMesh" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -3 )
+mesh = SubResource( 11 )
+script = ExtResource( 11 )
 [connection signal="body_entered" from="moon/Area" to="moon/Area" method="_on_body_entered"]
 [connection signal="body_entered" from="player/Area" to="player" method="_on_body_entered"]

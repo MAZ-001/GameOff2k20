@@ -16,9 +16,9 @@ func _integrate_forces(state):
 	var player_cursor_node = get_node(player_cursor)
 	var target = player_cursor_node.global_transform.origin
 	var local = self.to_local(target)
-	if local.x > 0:
+	if local.x > 0.1:
 		get_node(player_scene).scale = Vector3(-0.1, 0.1, -0.1)
-	if local.x < 0:
+	if local.x < -0.1:
 		get_node(player_scene).scale = Vector3(0.1, 0.1, 0.1)
 	
 	
@@ -44,6 +44,10 @@ func _process(_delta):
 		self.linear_velocity = velocity + uplift
 	
 	get_node(player_scene).find_node('AnimationTree').set('parameters/hover/blend_amount', distance*2)
+	var particles_left : Particles = get_node(player_scene).find_node('Particles_left')
+	particles_left.process_material.initial_velocity = -1 - (distance * 50)
+	var particles_right : Particles = get_node(player_scene).find_node('Particles_right')
+	particles_right.process_material.initial_velocity = -1 - (distance * 50)
 
 
 func _on_body_entered(body: Node):

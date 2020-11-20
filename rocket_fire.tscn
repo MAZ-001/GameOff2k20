@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=2]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0, 0.056338, 0.517606, 1 )
+colors = PoolColorArray( 1, 0.862745, 0, 0.478431, 1, 1, 1, 0.541176, 0.498039, 0.498039, 0.498039, 0.137255, 0, 0, 0, 0 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0.117329 ), 0.0, 0.0, 0, 0, Vector2( 0.613853, 0.370036 ), 0.90686, 0.90686, 0, 0, Vector2( 1, 1 ), 3.33404, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+lifetime_randomness = 0.3
+direction = Vector3( 0, 1, 0 )
+spread = 1.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = -0.2
+initial_velocity_random = 0.1
+angular_velocity = 1.0
+angular_velocity_random = 1.0
+damping = 0.1
+damping_random = 0.1
+scale = 2.0
+scale_random = 0.1
+scale_curve = SubResource( 4 )
+color_ramp = SubResource( 2 )
+
+[sub_resource type="SpatialMaterial" id=6]
+flags_transparent = true
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id=7]
+material = SubResource( 6 )
+radius = 0.05
+height = 0.1
+radial_segments = 4
+rings = 1
+
+[node name="Particles" type="Particles"]
+amount = 120
+lifetime = 0.2
+randomness = 1.0
+visibility_aabb = AABB( -5.82695, -4, -4, 11.6539, 8, 8 )
+local_coords = false
+process_material = SubResource( 5 )
+draw_pass_1 = SubResource( 7 )

@@ -1,16 +1,58 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=26 format=2]
 
-[ext_resource path="res://player_cursor.gd" type="Script" id=1]
-[ext_resource path="res://game.gd" type="Script" id=2]
-[ext_resource path="res://player.gd" type="Script" id=3]
-[ext_resource path="res://fps.vs" type="Script" id=4]
-[ext_resource path="res://score.gd" type="Script" id=5]
-[ext_resource path="res://moon.tscn" type="PackedScene" id=6]
-[ext_resource path="res://bobembu.tscn" type="PackedScene" id=7]
-[ext_resource path="res://moon.gd" type="Script" id=8]
-[ext_resource path="res://ui_cursor.gd" type="Script" id=9]
-[ext_resource path="res://cursor.png" type="Texture" id=10]
-[ext_resource path="res://starfield_texture.gd" type="Script" id=11]
+[ext_resource path="res://scripts/player_cursor.gd" type="Script" id=1]
+[ext_resource path="res://scripts/game.gd" type="Script" id=2]
+[ext_resource path="res://scripts/player.gd" type="Script" id=3]
+[ext_resource path="res://scripts/fps.vs" type="Script" id=4]
+[ext_resource path="res://scripts/score.gd" type="Script" id=5]
+[ext_resource path="res://scenes/moon.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/bobembu.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scripts/moon.gd" type="Script" id=8]
+[ext_resource path="res://scripts/ui_cursor.gd" type="Script" id=9]
+[ext_resource path="res://assets/cursor.png" type="Texture" id=10]
+[ext_resource path="res://scenes/starfield_script_texture.tscn" type="PackedScene" id=11]
+[ext_resource path="res://scripts/camera.gd" type="Script" id=12]
+[ext_resource path="res://scripts/oob.gd" type="Script" id=13]
+[ext_resource path="res://scripts/bullet_spawn.gd" type="Script" id=14]
+[ext_resource path="res://scripts/target_spawn.gd" type="Script" id=15]
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.709804, 0.478431, 0, 1 )
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.482353, 0.345098, 0, 0.0784314 )
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color( 0.596078, 0.4, 0, 1 )
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 1, 1, 1, 0.364706 )
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id=10]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [sub_resource type="SphereShape" id=1]
 radius = 5.0
@@ -30,13 +72,14 @@ height = 0.2
 radius = 0.15
 height = 0.5
 
-[sub_resource type="PlaneMesh" id=11]
-size = Vector2( 20, 10 )
+[sub_resource type="BoxShape" id=6]
+extents = Vector3( 12, 6, 2 )
 
-[node name="Spatial" type="Spatial"]
+[node name="main_scene" type="Spatial"]
 script = ExtResource( 2 )
+target_spawn = NodePath("target_spawn")
 
-[node name="Control" type="Control" parent="."]
+[node name="ui" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
@@ -47,7 +90,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="fps" type="Label" parent="Control"]
+[node name="fps_label" type="Label" parent="ui"]
 anchor_right = 0.039
 anchor_bottom = 0.023
 margin_right = 0.0639992
@@ -58,7 +101,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="score" type="Label" parent="Control"]
+[node name="score_label" type="Label" parent="ui"]
 anchor_left = 0.898
 anchor_right = 1.0
 anchor_bottom = 0.028
@@ -71,25 +114,86 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="TextureRect" parent="Control"]
-margin_left = 247.635
-margin_top = 82.5449
-margin_right = 347.635
-margin_bottom = 182.545
+[node name="cursor" type="TextureRect" parent="ui"]
+margin_left = -141.596
+margin_top = -132.707
+margin_right = -41.5961
+margin_bottom = -32.7068
 texture = ExtResource( 10 )
 script = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="light_target" type="Spatial" parent="."]
+[node name="ammo" type="ProgressBar" parent="ui"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 976.898
+margin_top = 574.0
+margin_right = 20.8979
+margin_bottom = 11.0
+rect_rotation = -90.0
+size_flags_stretch_ratio = 0.0
+custom_styles/fg = SubResource( 7 )
+custom_styles/bg = SubResource( 8 )
+value = 100.0
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ui"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 305.0
+margin_top = 554.0
+margin_right = -295.0
+margin_bottom = -11.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="hit_indicator" type="ProgressBar" parent="ui/HBoxContainer"]
+margin_left = 194.0
+margin_right = 219.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 25, 25 )
+custom_styles/fg = SubResource( 9 )
+custom_styles/bg = SubResource( 10 )
+max_value = 1.0
+step = 1.0
+percent_visible = false
+
+[node name="bullet_spawn" type="Spatial" parent="."]
+script = ExtResource( 14 )
+particle_spawn = NodePath("../particle_spawn")
+
+[node name="particle_spawn" type="Spatial" parent="."]
+
+[node name="target_spawn" type="Spatial" parent="."]
+script = ExtResource( 15 )
+
+[node name="lights" type="Spatial" parent="."]
+
+[node name="light_target" type="Spatial" parent="lights"]
 transform = Transform( -0.568164, -0.265409, -0.778941, -0.597935, 0.783487, 0.169178, 0.565389, 0.561876, -0.603846, 0, 0, 0 )
 
-[node name="DirectionalLight" type="DirectionalLight" parent="light_target"]
+[node name="DirectionalLight" type="DirectionalLight" parent="lights/light_target"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 17.6135 )
 light_color = Color( 1, 0.956863, 0.811765, 1 )
 shadow_enabled = true
 shadow_color = Color( 0.207843, 0.105882, 0.105882, 1 )
+
+[node name="rim_light" type="OmniLight" parent="lights"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.49055, -1.36266, 1.3299 )
+light_color = Color( 0.113725, 0.227451, 0.392157, 1 )
+light_energy = 0.09
+
+[node name="ambient_light" type="OmniLight" parent="lights"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.0549 )
+light_color = Color( 0.384314, 0.552941, 0.796078, 1 )
+omni_range = 20.0
 
 [node name="moon" parent="." instance=ExtResource( 6 )]
 
@@ -108,11 +212,11 @@ shape = SubResource( 1 )
 [node name="player_cursor" type="Spatial" parent="moon"]
 script = ExtResource( 1 )
 camera = NodePath("../../camera_target/camera")
-world = NodePath("../..")
-shot_origin = NodePath("../../moon/player_cursor/CSGSphere")
-player_scene = NodePath("../../player/bobembu")
+bullet_spawn = NodePath("../../bullet_spawn")
+shot_origin = NodePath("player_move_target")
+player_scene = NodePath("../../player")
 
-[node name="CSGSphere" type="CSGSphere" parent="moon/player_cursor"]
+[node name="player_move_target" type="CSGSphere" parent="moon/player_cursor"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.125, 0 )
 visible = false
 radius = 0.05
@@ -120,10 +224,11 @@ radial_segments = 4
 rings = 3
 smooth_faces = false
 
-[node name="Area" type="Area" parent="moon"]
+[node name="impact_area" type="Area" parent="moon"]
 script = ExtResource( 8 )
+particle_spawn = NodePath("../../particle_spawn")
 
-[node name="CollisionShape" type="CollisionShape" parent="moon/Area"]
+[node name="impact_shape" type="CollisionShape" parent="moon/impact_area"]
 shape = SubResource( 2 )
 
 [node name="camera_target" type="Spatial" parent="."]
@@ -133,6 +238,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 17.6135 )
 environment = SubResource( 3 )
 fov = 26.9
 collision_mask = 0
+script = ExtResource( 12 )
 
 [node name="player" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12497, 0 )
@@ -140,8 +246,10 @@ axis_lock_linear_z = true
 axis_lock_angular_x = true
 axis_lock_angular_y = true
 script = ExtResource( 3 )
-player_cursor = NodePath("../moon/player_cursor/CSGSphere")
+player_cursor = NodePath("../moon/player_cursor/player_move_target")
 player_scene = NodePath("bobembu")
+moon_script = NodePath("../moon/impact_area")
+camera = NodePath("../camera_target/camera")
 
 [node name="CollisionShape" type="CollisionShape" parent="player"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0.0544918, 0 )
@@ -156,19 +264,13 @@ transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, -0.0070
 [node name="CollisionShape" type="CollisionShape" parent="player/Area"]
 shape = SubResource( 5 )
 
-[node name="rim_light" type="OmniLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.49055, -1.36266, 1.3299 )
-light_color = Color( 0.113725, 0.227451, 0.392157, 1 )
-light_energy = 0.09
+[node name="starfield" parent="." instance=ExtResource( 11 )]
 
-[node name="ambient_light" type="OmniLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.0549 )
-light_color = Color( 0.384314, 0.552941, 0.796078, 1 )
-omni_range = 20.0
+[node name="oob" type="Area" parent="."]
+script = ExtResource( 13 )
 
-[node name="starfield" type="CSGMesh" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -3 )
-mesh = SubResource( 11 )
-script = ExtResource( 11 )
-[connection signal="body_entered" from="moon/Area" to="moon/Area" method="_on_body_entered"]
+[node name="CollisionShape" type="CollisionShape" parent="oob"]
+shape = SubResource( 6 )
+[connection signal="body_entered" from="moon/impact_area" to="moon/impact_area" method="_on_body_entered"]
 [connection signal="body_entered" from="player/Area" to="player" method="_on_body_entered"]
+[connection signal="body_exited" from="oob" to="oob" method="_on_body_exited"]

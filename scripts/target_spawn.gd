@@ -1,29 +1,12 @@
 extends Spatial
 
-var target: PackedScene = load('res://target_basic.tscn')
-var target_asteroid: PackedScene = load('res://target_asteroid.tscn')
-var target_cheese: PackedScene = load('res://target_cheese.tscn')
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-var timer = 0
-var timer_limit = 2.0
+var target: PackedScene = preload('res://scenes/target_basic.tscn')
+var target_asteroid: PackedScene = preload('res://scenes/target_asteroid.tscn')
+var target_cheese: PackedScene = preload('res://scenes/target_cheese.tscn')
 
 var x_max = 8
 var y_max = 6
 var rng = RandomNumberGenerator.new()
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	rng.randomize()
-	
-	var screen_size = OS.get_screen_size()
-	var window_size = OS.get_window_size()
-
-	OS.set_window_position(screen_size*0.5 - window_size*0.5)
-	
 
 func spawn_target():
 	var instance: Node
@@ -54,10 +37,3 @@ func spawn_target():
 	instance.angular_velocity = Vector3(rand_range(-1, 1), rand_range(-1, 1), rand_range(-1, 1))
 	
 	self.add_child(instance)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	timer += delta
-	if (timer > timer_limit):
-		spawn_target()
-		timer -= timer_limit

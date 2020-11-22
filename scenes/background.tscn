@@ -1,12 +1,13 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://background.gd" type="Script" id=1]
+[ext_resource path="res://scripts/background.gd" type="Script" id=1]
 
-[sub_resource type="PlaneMesh" id=4]
+
+[sub_resource type="PlaneMesh" id=1]
 size = Vector2( 11, 21 )
 
 [node name="background" type="CSGMesh"]
 transform = Transform( 2.65431e-14, 1.62921e-07, 1, 1, -1.62921e-07, 0, 1.62921e-07, 1, -1.62921e-07, 0, 0, -5 )
 visible = false
-mesh = SubResource( 4 )
+mesh = SubResource( 1 )
 script = ExtResource( 1 )

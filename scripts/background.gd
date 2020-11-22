@@ -1,13 +1,8 @@
 extends CSGMesh
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
 var rng = RandomNumberGenerator.new()
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	rng.randomize()
 	
@@ -20,7 +15,6 @@ func _ready():
 	
 	var result = Mesh.new()
 	var st = SurfaceTool.new()
-	#st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
 	var sphere = SphereMesh.new()
 	sphere.radial_segments = 4
@@ -40,8 +34,3 @@ func _ready():
 	
 	print(result)
 	self.mesh = result
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass

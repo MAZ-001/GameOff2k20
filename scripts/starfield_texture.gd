@@ -20,8 +20,8 @@ func _ready():
 	for r in range(1, 4):
 		for _j in range(0, 500):
 			color.a = rng.randf_range(0.0, 1)
-			x = rng.randi_range(0, image.get_size().x-1)
-			y = rng.randi_range(0, image.get_size().y-1)
+			x = rng.randi_range(0, image.get_size().x-2)
+			y = rng.randi_range(0, image.get_size().y-2)
 			image.set_pixel(x, y, color)
 			if r >= 2:
 				image.set_pixel(x+1, y, color)

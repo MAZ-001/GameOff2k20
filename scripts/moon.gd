@@ -80,6 +80,9 @@ func spawn_particles(body: RigidBody):
 	
 	particle.restart()
 	particles.append(particle)
+	
+	var sound = get_node('/root/main_scene/sound/sound_impact_moon')
+	sound.play(0.05)
 
 
 func _on_body_entered(body: Node):

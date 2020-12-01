@@ -8,6 +8,11 @@ var x_max = 8
 var y_max = 6
 var rng = RandomNumberGenerator.new()
 
+
+func _ready():
+	rng.randomize()
+
+
 func spawn_target():
 	var instance: Node
 	var target_type: int = rng.randi_range(1, 2)
@@ -20,7 +25,7 @@ func spawn_target():
 		instance.scale = Vector3(rand_range(0.1, 0.4), rand_range(0.1, 0.4), rand_range(0.1, 0.4))
 	elif target_type == 2:
 		instance = target_cheese.instance()
-		instance.scale = Vector3(rand_range(0.5, 1.0), rand_range(0.5, 1), rand_range(0.5, 1.0))
+		instance.scale = Vector3(rand_range(0.5, 0.75), rand_range(0.5, 0.75), rand_range(0.5, 0.75))
 	
 	var mode = rng.randi_range(0, 3)
 	if mode == 0:

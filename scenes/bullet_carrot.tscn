@@ -3,7 +3,6 @@
 [ext_resource path="res://blender/bullet_carrot.gltf" type="PackedScene" id=1]
 [ext_resource path="res://scripts/bullet.gd" type="Script" id=2]
 
-
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 1, 0.419608, 0, 1 )
 
@@ -19,6 +18,9 @@ albedo_color = Color( 0.0862745, 0.435294, 0.0980392, 1 )
 [sub_resource type="CapsuleShape" id=5]
 
 [node name="bullet_carrot" instance=ExtResource( 1 )]
+collision_layer = 512
+collision_mask = 512
+axis_lock_linear_z = true
 
 [node name="carrot" parent="." index="0"]
 material/0 = SubResource( 1 )

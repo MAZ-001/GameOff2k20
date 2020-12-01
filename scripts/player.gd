@@ -13,6 +13,7 @@ var particles_left: Particles
 var particles_right: Particles
 var moon_script_node: Node
 var camera_node: ClippedCamera
+var sound: AudioStreamPlayer3D
 
 func _ready():
 	player_cursor_node = get_node(player_cursor)
@@ -23,7 +24,11 @@ func _ready():
 	player_animation = player_scene_node.find_node('AnimationTree')
 	particles_left = player_scene_node.find_node('Particles_left')
 	particles_right = player_scene_node.find_node('Particles_right')
-
+	sound = get_node("sound_jetpack")
+	var stream: AudioStreamSample = sound.stream
+	stream.loop_mode = AudioStreamSample.LOOP_PING_PONG
+	stream.loop_begin = 2000
+	stream.loop_end = 40000
 
 func _integrate_forces(state):
 	var target = self.player_cursor_node.global_transform.origin
@@ -53,6 +58,7 @@ func _process(_delta):
 	player_animation.set('parameters/hover/blend_amount', distance*2)
 	self.particles_left.process_material.initial_velocity = -1 - (distance * 50)
 	self.particles_right.process_material.initial_velocity = -1 - (distance * 50)
+	sound.pitch_scale = max(0.1, min(distance, 2))
 
 
 func _on_body_entered(body: Node):
@@ -61,5 +67,6 @@ func _on_body_entered(body: Node):
 		name = body.name
 	if name in ['target']:
 		self.moon_script_node.spawn_particles(body)
+		get_node('/root/main_scene').add_hit()
 		self.camera_node.enable_shake()
 		body.queue_free()

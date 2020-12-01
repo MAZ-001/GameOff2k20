@@ -1,11 +1,39 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://blender/target_cheese.gltf" type="PackedScene" id=1]
 [ext_resource path="res://scripts/target.gd" type="Script" id=2]
 
-
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 1, 0.780392, 0, 1 )
+
+[sub_resource type="Gradient" id=2]
+colors = PoolColorArray( 1, 0.861328, 0, 1, 1, 1, 0, 0 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+
+[sub_resource type="ParticlesMaterial" id=4]
+emission_shape = 1
+emission_sphere_radius = 0.4
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 0.1
+angular_velocity = 1.0
+angular_velocity_random = 1.0
+linear_accel_random = 1.0
+radial_accel_random = 1.0
+color_ramp = SubResource( 3 )
+
+[sub_resource type="SpatialMaterial" id=5]
+flags_transparent = true
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id=6]
+material = SubResource( 5 )
+radius = 0.025
+height = 0.05
+radial_segments = 4
+rings = 1
 
 [node name="target_cheese" instance=ExtResource( 1 )]
 axis_lock_linear_z = true
@@ -14,3 +42,10 @@ type = "target"
 
 [node name="cheese" parent="." index="0"]
 material/0 = SubResource( 1 )
+
+[node name="Particles" type="Particles" parent="." index="2"]
+amount = 100
+lifetime = 2.0
+local_coords = false
+process_material = SubResource( 4 )
+draw_pass_1 = SubResource( 6 )

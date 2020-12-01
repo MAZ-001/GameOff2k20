@@ -8,6 +8,7 @@ var rng = RandomNumberGenerator.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	rng.randomize()
 	var size = get_viewport().size
 	var scale = 1.5
 	

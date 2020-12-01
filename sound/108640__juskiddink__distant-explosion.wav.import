@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/108640__juskiddink__distant-explosion.wav-f17c6fe3a357750436aa0c16182385f9.sample"
+
+[deps]
+
+source_file="res://sound/108640__juskiddink__distant-explosion.wav"
+dest_files=[ "res://.import/108640__juskiddink__distant-explosion.wav-f17c6fe3a357750436aa0c16182385f9.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

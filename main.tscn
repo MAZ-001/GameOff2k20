@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://scripts/player_cursor.gd" type="Script" id=1]
 [ext_resource path="res://scripts/game.gd" type="Script" id=2]
@@ -10,20 +10,30 @@
 [ext_resource path="res://scripts/moon.gd" type="Script" id=8]
 [ext_resource path="res://scripts/ui_cursor.gd" type="Script" id=9]
 [ext_resource path="res://assets/cursor.png" type="Texture" id=10]
-[ext_resource path="res://scenes/starfield_script_texture.tscn" type="PackedScene" id=11]
+[ext_resource path="res://scripts/upgrade.gd" type="Script" id=11]
 [ext_resource path="res://scripts/camera.gd" type="Script" id=12]
 [ext_resource path="res://scripts/oob.gd" type="Script" id=13]
 [ext_resource path="res://scripts/bullet_spawn.gd" type="Script" id=14]
 [ext_resource path="res://scripts/target_spawn.gd" type="Script" id=15]
+[ext_resource path="res://scripts/ui_pause.gd" type="Script" id=16]
+[ext_resource path="res://scripts/ui_time.gd" type="Script" id=17]
+[ext_resource path="res://scripts/upgrade_select.gd" type="Script" id=18]
+[ext_resource path="res://scripts/ui_runs.gd" type="Script" id=19]
+[ext_resource path="res://scripts/main_menu.gd" type="Script" id=20]
+[ext_resource path="res://scenes/starfield_shader.tscn" type="PackedScene" id=21]
+[ext_resource path="res://sound/346373__denao270__throwing-whip-effect.wav" type="AudioStream" id=22]
+[ext_resource path="res://sound/108640__juskiddink__distant-explosion.wav" type="AudioStream" id=23]
+[ext_resource path="res://sound/149966__nenadsimic__muffled-distant-explosion.wav" type="AudioStream" id=24]
+[ext_resource path="res://sound/402816__jacksonacademyashmore__jetpack-loop.wav" type="AudioStream" id=25]
 
-[sub_resource type="StyleBoxFlat" id=7]
+[sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.709804, 0.478431, 0, 1 )
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id=8]
+[sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0.482353, 0.345098, 0, 0.0784314 )
 draw_center = false
 border_width_left = 3
@@ -36,14 +46,14 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id=9]
+[sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 1, 1, 1, 0.364706 )
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id=10]
+[sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
 border_width_left = 3
 border_width_top = 3
@@ -54,25 +64,25 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="SphereShape" id=1]
+[sub_resource type="SphereShape" id=5]
 radius = 5.0
 
-[sub_resource type="SphereShape" id=2]
+[sub_resource type="SphereShape" id=6]
 margin = 0.01
 radius = 1.02
 
-[sub_resource type="Environment" id=3]
+[sub_resource type="Environment" id=7]
 background_mode = 1
 
-[sub_resource type="CapsuleShape" id=4]
+[sub_resource type="CapsuleShape" id=8]
 radius = 0.08
 height = 0.2
 
-[sub_resource type="CapsuleShape" id=5]
+[sub_resource type="CapsuleShape" id=9]
 radius = 0.15
 height = 0.5
 
-[sub_resource type="BoxShape" id=6]
+[sub_resource type="BoxShape" id=10]
 extents = Vector3( 12, 6, 2 )
 
 [node name="main_scene" type="Spatial"]
@@ -90,29 +100,437 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="fps_label" type="Label" parent="ui"]
-anchor_right = 0.039
-anchor_bottom = 0.023
-margin_right = 0.0639992
-margin_bottom = 0.199999
+[node name="choose" type="PopupDialog" parent="ui"]
+pause_mode = 2
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -179.0
+margin_top = -100.0
+margin_right = 184.0
+margin_bottom = 100.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="title" type="Label" parent="ui/choose"]
+anchor_left = 0.5
+anchor_top = 0.118
+anchor_right = 0.5
+anchor_bottom = 0.118
+margin_left = -68.1727
+margin_top = -10.2183
+margin_right = 69.8273
+margin_bottom = 13.7817
+text = "You did it!"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="text" type="Label" parent="ui/choose"]
+anchor_left = 0.5
+anchor_top = 0.373
+anchor_right = 0.5
+anchor_bottom = 0.373
+margin_left = -155.5
+margin_top = -24.6
+margin_right = 150.5
+margin_bottom = 53.4
+text = "You collected 50 cheese."
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="continue" type="Button" parent="ui/choose"]
+anchor_left = 0.5
+anchor_top = 0.831
+anchor_right = 0.5
+anchor_bottom = 0.831
+margin_left = -133.737
+margin_top = -14.1659
+margin_right = -13.7371
+margin_bottom = 15.8341
+text = "Continue Game"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="earth" type="Button" parent="ui/choose"]
+margin_left = 193.743
+margin_top = 152.034
+margin_right = 313.743
+margin_bottom = 182.034
+text = "Fly to Earth"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="finished" type="PopupDialog" parent="ui"]
+pause_mode = 2
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -450.0
+margin_top = -138.0
+margin_right = 450.0
+margin_bottom = 151.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ui/finished"]
+anchor_top = 0.206
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 9.0
+margin_top = -21.2
+margin_right = -6.0
+margin_bottom = 60.834
+text = "Finally! He gathered all the parts he needed and fixed his cheeseship!
+Bobembu was shaking a little when starting the ship. Seeing the earth being so close all the time had made him even more
+curious than he thought he could ever be. 
+Carefully he flew to the strange blueish planet. This time, he landed smooth and save. He took a deep breath.
+While exiting the cheeseship, he smelled this sweet smell he remembered so vividly: Earth carrots!
+They were everywhere! And while he was still taking in the view and the smell, he noticed a second familiar scent - her scent.
+\"Bobembu! You came here?\" She looked surprised, but very happy.
+They talked and shared carrots for several hours and he finally learned her name: Kanina!
+
+THE END"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="new_game" type="Button" parent="ui/finished"]
+anchor_left = 0.5
+anchor_top = 0.868
+anchor_right = 0.5
+anchor_bottom = 0.868
+margin_left = -61.0
+margin_top = -10.852
+margin_right = 64.0
+margin_bottom = 16.148
+text = "New Game"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="run_failed" type="PopupDialog" parent="ui"]
+pause_mode = 2
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -107.0
+margin_top = -51.0
+margin_right = 110.0
+margin_bottom = 80.0
+popup_exclusive = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ui/run_failed"]
+anchor_left = 0.021
+anchor_top = 0.114
+anchor_right = 0.982
+anchor_bottom = 0.376
+margin_left = 0.578742
+margin_top = 7.00716
+margin_right = 0.0417328
+margin_bottom = -2.31484
+text = "Run failed!"
+align = 1
+
+[node name="Button" type="Button" parent="ui/run_failed"]
+anchor_left = 0.058
+anchor_top = 0.534
+anchor_right = 0.959
+anchor_bottom = 0.9
+margin_left = -4.25568
+margin_top = 7.51206
+margin_right = 1.22731
+margin_bottom = -5.43394
+text = "Choose Upgrade and try again"
+
+[node name="pause_popup" type="PopupDialog" parent="ui"]
+pause_mode = 2
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -70.0
+margin_top = -50.0
+margin_right = 70.0
+margin_bottom = 50.0
+popup_exclusive = true
+
+[node name="Label" type="Label" parent="ui/pause_popup"]
+anchor_right = 1.0
+anchor_bottom = 0.281
+margin_left = 48.5277
+margin_top = 9.98108
+margin_right = -45.4723
+margin_bottom = -0.746922
+text = "Pause"
+align = 1
+
+[node name="Button" type="Button" parent="ui/pause_popup"]
+anchor_left = 0.5
+anchor_top = 0.65
+anchor_right = 0.5
+anchor_bottom = 0.65
+margin_left = -32.0971
+margin_top = -9.9252
+margin_right = 35.9029
+margin_bottom = 10.0748
+text = "continue"
+script = ExtResource( 16 )
+
+[node name="main_menu" type="PopupDialog" parent="ui"]
+pause_mode = 2
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -97.0
+margin_top = -71.0
+margin_right = 103.0
+margin_bottom = 122.0
+popup_exclusive = true
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ui/main_menu"]
+anchor_right = 1.0
+anchor_bottom = 0.238
+margin_left = 30.0679
+margin_top = 10.7285
+margin_right = -25.9321
+margin_bottom = -12.8715
+text = "Menu"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ui/main_menu"]
+margin_left = 16.0
+margin_top = 44.0
+margin_right = 186.0
+margin_bottom = 146.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="intro" type="Button" parent="ui/main_menu/VBoxContainer"]
+margin_right = 170.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+text = "Intro"
+
+[node name="new_game" type="Button" parent="ui/main_menu/VBoxContainer"]
+margin_top = 34.0
+margin_right = 170.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 0, 30 )
+text = "New Game"
+
+[node name="continue" type="Button" parent="ui/main_menu/VBoxContainer"]
+margin_top = 68.0
+margin_right = 170.0
+margin_bottom = 98.0
+rect_min_size = Vector2( 0, 30 )
+text = "Continue"
+
+[node name="quit" type="Button" parent="ui/main_menu/VBoxContainer"]
+margin_top = 102.0
+margin_right = 170.0
+margin_bottom = 132.0
+rect_min_size = Vector2( 0, 30 )
+text = "Quit"
+
+[node name="intro" type="PopupDialog" parent="ui"]
+pause_mode = 2
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -450.0
+margin_top = -210.0
+margin_right = 450.0
+margin_bottom = 210.0
+popup_exclusive = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="title" type="Label" parent="ui/intro"]
+anchor_left = 0.5
+anchor_top = 0.055
+anchor_right = 0.5
+anchor_bottom = 0.055
+margin_left = -55.0
+margin_top = -9.36359
+margin_right = 57.0
+margin_bottom = 11.6364
+text = "Story"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="text" type="Label" parent="ui/intro"]
+anchor_left = 0.5
+anchor_top = 0.45
+anchor_right = 0.5
+anchor_bottom = 0.45
+margin_left = -431.927
+margin_top = -137.309
+margin_right = 429.073
+margin_bottom = 149.691
+text = "Bobembu was a very well known gourmet on the planet of the space rabbits. He knew everything about carrots! EVERYTHING!
+... until some mysterious alien rabbit from a distant planet arrived. She was the most radiant rabbit girl Bobembu has ever had seen. And there was even more to her! 
+She loved carrots!
+She told him she wanted to explore space to taste every carrot there is, but nothing she tasted was able to beat the carrots from her home planet: Earth.
+Far from home as she was, she still had one of her favorite carrots left - and lucky as he was, she shared it with him!
+The taste was like nothing else he ever had tasted before. Months after she left for her home, Bobembu still thought every day about her and her planets tasty carrots.
+He finally decided to go to space! To look for this mysterious planet earth with its tastily tasty carrots and the girl he never learned the name of.
+He travelled for weeks and months until he finally saw it. Excited as he was, he prepared for landing and... what was that!? 
+There was some rock orbiting this planet and before he could process this, he had already crashed with a loud bang!
+What should he do know? Stranded on this rock with his cheesy spaceship? Then he noticed, that there were cheese-like parts flying around. 
+Maybe if he collected them, he could fix the cheeseship..."
+autowrap = true
+
+[node name="close" type="Button" parent="ui/intro"]
+anchor_left = 0.5
+anchor_top = 0.883
+anchor_right = 0.5
+anchor_bottom = 0.883
+margin_left = -48.0
+margin_top = -14.2
+margin_right = 48.0
+margin_bottom = 18.8
+text = "Close"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="upgrade_select" type="PopupDialog" parent="ui"]
+pause_mode = 2
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -100.0
+margin_top = -100.0
+margin_right = 110.0
+margin_bottom = 149.0
+popup_exclusive = true
+script = ExtResource( 18 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ui/upgrade_select"]
+anchor_right = 1.0
+anchor_bottom = 0.189
+margin_left = 29.7159
+margin_top = 11.6028
+margin_right = -34.2841
+margin_bottom = -9.08717
+text = "Choose Upgrade"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="list" type="ItemList" parent="ui/upgrade_select"]
+anchor_top = 0.196
+anchor_right = 1.029
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 4.196
+margin_right = -16.09
+margin_bottom = -52.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="continue" type="Button" parent="ui/upgrade_select"]
+anchor_top = 0.828
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 41.6469
+margin_top = 3.13048
+margin_right = -40.3531
+margin_bottom = -13.6975
+text = "Continue"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ui"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="fps_label" type="Label" parent="ui/VBoxContainer"]
+visible = false
+margin_right = 44.0
+margin_bottom = 14.0
 text = "fps: ?"
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="score_label" type="Label" parent="ui"]
-anchor_left = 0.898
+[node name="time_label" type="Label" parent="ui/VBoxContainer"]
+margin_right = 44.0
+margin_bottom = 14.0
+text = "time: ?"
+script = ExtResource( 17 )
+
+[node name="runs_label" type="Label" parent="ui/VBoxContainer"]
+margin_top = 18.0
+margin_right = 44.0
+margin_bottom = 32.0
+text = "runs: ?"
+script = ExtResource( 19 )
+
+[node name="vbox_right" type="VBoxContainer" parent="ui"]
+anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 0.028
-margin_left = 0.447937
-margin_bottom = 0.199999
+margin_left = -80.0
+margin_bottom = 44.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="score_label" type="Label" parent="ui/vbox_right"]
+visible = false
+margin_right = 80.0
+margin_bottom = 14.0
 text = "score: 0"
 align = 2
 script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="upgrade_label" type="Label" parent="ui/vbox_right"]
+pause_mode = 2
+margin_right = 80.0
+margin_bottom = 14.0
+text = "cheese: 0"
+align = 2
+script = ExtResource( 11 )
 
 [node name="cursor" type="TextureRect" parent="ui"]
 margin_left = -141.596
@@ -126,16 +544,17 @@ __meta__ = {
 }
 
 [node name="ammo" type="ProgressBar" parent="ui"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 976.898
-margin_top = 574.0
-margin_right = 20.8979
-margin_bottom = 11.0
-rect_rotation = -90.0
+anchor_left = 0.4
+anchor_top = 0.01
+anchor_right = 0.6
+anchor_bottom = 0.01
+margin_right = -6.10352e-05
+margin_bottom = 10.0
+grow_vertical = 0
+size_flags_horizontal = 0
 size_flags_stretch_ratio = 0.0
-custom_styles/fg = SubResource( 7 )
-custom_styles/bg = SubResource( 8 )
+custom_styles/fg = SubResource( 1 )
+custom_styles/bg = SubResource( 2 )
 value = 100.0
 percent_visible = false
 __meta__ = {
@@ -143,27 +562,44 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ui"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 305.0
-margin_top = 554.0
-margin_right = -295.0
-margin_bottom = -11.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -134.987
+margin_top = -12.7816
+margin_right = 137.013
+margin_bottom = 20.2184
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="hit_indicator" type="ProgressBar" parent="ui/HBoxContainer"]
-margin_left = 194.0
-margin_right = 219.0
+margin_left = 123.0
+margin_right = 148.0
 margin_bottom = 25.0
 rect_min_size = Vector2( 25, 25 )
-custom_styles/fg = SubResource( 9 )
-custom_styles/bg = SubResource( 10 )
+custom_styles/fg = SubResource( 3 )
+custom_styles/bg = SubResource( 4 )
 max_value = 1.0
 step = 1.0
 percent_visible = false
+
+[node name="sound" type="Spatial" parent="."]
+pause_mode = 2
+
+[node name="sound_impact" type="AudioStreamPlayer3D" parent="sound"]
+stream = ExtResource( 23 )
+unit_db = 2.0
+unit_size = 4.0
+max_db = 5.0
+
+[node name="sound_impact_moon" type="AudioStreamPlayer3D" parent="sound"]
+stream = ExtResource( 24 )
+unit_db = 4.0
+unit_size = 6.0
+max_db = 6.0
 
 [node name="bullet_spawn" type="Spatial" parent="."]
 script = ExtResource( 14 )
@@ -181,19 +617,20 @@ transform = Transform( -0.568164, -0.265409, -0.778941, -0.597935, 0.783487, 0.1
 
 [node name="DirectionalLight" type="DirectionalLight" parent="lights/light_target"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 17.6135 )
-light_color = Color( 1, 0.956863, 0.811765, 1 )
+light_color = Color( 1, 0.772549, 0, 1 )
 shadow_enabled = true
 shadow_color = Color( 0.207843, 0.105882, 0.105882, 1 )
 
 [node name="rim_light" type="OmniLight" parent="lights"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.49055, -1.36266, 1.3299 )
-light_color = Color( 0.113725, 0.227451, 0.392157, 1 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.38562, -1.36266, 1.3299 )
+light_color = Color( 0, 0.407843, 1, 1 )
 light_energy = 0.09
 
 [node name="ambient_light" type="OmniLight" parent="lights"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.0549 )
-light_color = Color( 0.384314, 0.552941, 0.796078, 1 )
-omni_range = 20.0
+light_color = Color( 0.501961, 0.501961, 0.501961, 1 )
+light_energy = 2.0
+omni_range = 25.0
 
 [node name="moon" parent="." instance=ExtResource( 6 )]
 
@@ -207,13 +644,13 @@ linear_damp = 0.01
 angular_damp = 0.01
 
 [node name="gravity_shape" type="CollisionShape" parent="moon/gravity_area"]
-shape = SubResource( 1 )
+shape = SubResource( 5 )
 
 [node name="player_cursor" type="Spatial" parent="moon"]
 script = ExtResource( 1 )
 camera = NodePath("../../camera_target/camera")
 bullet_spawn = NodePath("../../bullet_spawn")
-shot_origin = NodePath("player_move_target")
+shot_origin = NodePath("../../player")
 player_scene = NodePath("../../player")
 
 [node name="player_move_target" type="CSGSphere" parent="moon/player_cursor"]
@@ -229,13 +666,13 @@ script = ExtResource( 8 )
 particle_spawn = NodePath("../../particle_spawn")
 
 [node name="impact_shape" type="CollisionShape" parent="moon/impact_area"]
-shape = SubResource( 2 )
+shape = SubResource( 6 )
 
 [node name="camera_target" type="Spatial" parent="."]
 
 [node name="camera" type="ClippedCamera" parent="camera_target"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 17.6135 )
-environment = SubResource( 3 )
+environment = SubResource( 7 )
 fov = 26.9
 collision_mask = 0
 script = ExtResource( 12 )
@@ -253,7 +690,7 @@ camera = NodePath("../camera_target/camera")
 
 [node name="CollisionShape" type="CollisionShape" parent="player"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0.0544918, 0 )
-shape = SubResource( 4 )
+shape = SubResource( 8 )
 
 [node name="bobembu" parent="player" instance=ExtResource( 7 )]
 transform = Transform( -4.37114e-09, 0, -0.1, 0, 0.1, 0, 0.1, 0, -4.37114e-09, 0, -0.13438, 0 )
@@ -262,15 +699,35 @@ transform = Transform( -4.37114e-09, 0, -0.1, 0, 0.1, 0, 0.1, 0, -4.37114e-09, 0
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, -0.00706649, 0.130586, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="player/Area"]
-shape = SubResource( 5 )
+shape = SubResource( 9 )
 
-[node name="starfield" parent="." instance=ExtResource( 11 )]
+[node name="throw_sound" type="AudioStreamPlayer3D" parent="player"]
+stream = ExtResource( 22 )
+
+[node name="sound_jetpack" type="AudioStreamPlayer3D" parent="player"]
+stream = ExtResource( 25 )
+autoplay = true
+
+[node name="starfield_shader" parent="." instance=ExtResource( 21 )]
 
 [node name="oob" type="Area" parent="."]
 script = ExtResource( 13 )
 
 [node name="CollisionShape" type="CollisionShape" parent="oob"]
-shape = SubResource( 6 )
+shape = SubResource( 10 )
+[connection signal="button_up" from="ui/choose/continue" to="." method="_on_continue_button_up"]
+[connection signal="button_up" from="ui/choose/earth" to="." method="_on_earth_button_up"]
+[connection signal="button_up" from="ui/finished/new_game" to="." method="_on_new_game_button_up"]
+[connection signal="button_up" from="ui/run_failed/Button" to="." method="_on_choose_upgrade_button_up"]
+[connection signal="button_up" from="ui/pause_popup/Button" to="ui/pause_popup/Button" method="_on_button_up"]
+[connection signal="about_to_show" from="ui/main_menu" to="ui/main_menu" method="_on_about_to_show"]
+[connection signal="button_up" from="ui/main_menu/VBoxContainer/intro" to="." method="_on_intro_button_up"]
+[connection signal="button_up" from="ui/main_menu/VBoxContainer/new_game" to="." method="_on_new_game_button_up"]
+[connection signal="button_up" from="ui/main_menu/VBoxContainer/continue" to="ui/pause_popup/Button" method="_on_button_up"]
+[connection signal="button_up" from="ui/main_menu/VBoxContainer/quit" to="." method="_on_quit_button_up"]
+[connection signal="button_up" from="ui/intro/close" to="." method="_on_close_intro_button_up"]
+[connection signal="item_selected" from="ui/upgrade_select/list" to="ui/upgrade_select" method="_on_item_selected"]
+[connection signal="button_up" from="ui/upgrade_select/continue" to="ui/upgrade_select" method="_on_continue_button_up"]
 [connection signal="body_entered" from="moon/impact_area" to="moon/impact_area" method="_on_body_entered"]
 [connection signal="body_entered" from="player/Area" to="player" method="_on_body_entered"]
 [connection signal="body_exited" from="oob" to="oob" method="_on_body_exited"]

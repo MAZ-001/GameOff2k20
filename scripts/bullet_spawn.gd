@@ -76,3 +76,10 @@ func spawn_particles(body: RigidBody):
 	
 	particle.restart()
 	particles.append(particle)
+	
+	self.play_sound(body)
+
+func play_sound(body: RigidBody):
+	var sound = get_node('/root/main_scene/sound/sound_impact')
+	sound.stop()
+	sound.play(0.4)
